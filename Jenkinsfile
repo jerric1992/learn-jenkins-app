@@ -25,7 +25,7 @@ pipeline {
             }
         }
 
-        stage ('Test') {
+        stage ('E2E') {
             agent {
                 docker {
                     image 'node:18-alpine'
@@ -34,8 +34,9 @@ pipeline {
             }
             steps {
                 sh '''
-                    test -f build/$INDEX_FILE_NAME
-                    npm test
+                    npm install serve
+                    node_modules/.bin/serve -s build
+                    npx playwright test
                 '''
             }
         }
