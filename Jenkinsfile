@@ -25,10 +25,24 @@ pipeline {
             }
         }
 
-        stage ('E2E') {
+        stage ('Test') {
             agent {
                 docker {
                     image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    npm test
+                '''
+            }
+        }
+
+        stage ('E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.51.1-noble'
                     reuseNode true
                 }
             }
@@ -42,10 +56,10 @@ pipeline {
             }
         }
     }
-    /*
+    
     post {
         always {
-            junit 'test-results/junit.xml'
+            junit 'jest-results/junit.xml'
         }
     }
     */
